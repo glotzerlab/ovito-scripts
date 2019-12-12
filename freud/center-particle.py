@@ -10,5 +10,7 @@ def modify(frame, data):
     if data.particles != None:
         box = freud.box.Box.from_matrix(data.cell.matrix)
         pos_property = data.particles_['Position_']
+        new_center = data.particles.position[0]
         with pos_property:
-            pos_property[:] = box.wrap(data.particles.position - data.particles.position[0])
+            pos_property[:] = box.wrap(data.particles.position - new_center)
+        print('Shifted', new_center, 'to center.')
