@@ -4,12 +4,12 @@
 
 import freud
 
-def modify(frame, input, output):
-    if input.particles is not None:
-        box = freud.box.Box.from_matrix(input.cell.matrix)
-	positions = input.particles.position
-
-        ld = freud.density.LocalDensity(r_cut=3, volume=1, diameter=0.05)
-        ld.compute(box, input.particles.position)
-        output.create_user_particle_property(name='LocalDensity', data_type=float, data=ld.density)
-        print('Created property for {} particles.'.format(input.particles.count))
+def modify(frame, data):
+    if data.particles is not None:
+        box = freud.box.Box.from_matrix(data.cell.matrix)
+        points = data.particles.positions
+        system = (box, points)
+        ld = freud.density.LocalDensity(r_max=3, diameter=0.05)
+        ld.compute(system)
+        data.create_user_particle_property(name='LocalDensity', data_type=float, data=ld.density)
+        print('Created property for {} particles.'.format(data.particles.count))
