@@ -4,22 +4,25 @@
 
 import freud
 from ovito.data import *
+import numpy as np
 
 def sense_check(k):
     if k==0: print('WARNING! OVERWRITE k VALUE IN SCRIPT')
     return
 
-def modify(frame, input, output):
+def modify(frame, data):
     #   USER SHOULD SET THIS MANUALLY BEFORE RUNNING SCRIPT
     k = 6
     sense_check(k)
-    
-    if input.particles is not None:
-        box = freud.box.Box.from_matrix(input.cell.matrix, dimensions=2)
-        points = input.particles.position
+
+    if data.particles is not None:
+        box = freud.box.Box.from_matrix(data.cell.matrix, dimensions=2)
+        points = data.particles.positions
         system = (box, points)
 
         order_param = freud.order.Hexatic(k)
         order_param.compute(system)
-        output.create_user_particle_property(name='HexaticOrderParameter', data_type=float, data=order_param.particle_order)
-        print('Created property for {} particles.'.format(input.particles.count))
+        psi_k = np.copy(order_param.particle_order)
+        psi_k -= np.mean(psi_k)
+        data.create_user_particle_property(name='HexaticOrderParameter', data_type=float, data=np.angle(psi_k, deg=True)/order_param.k)
+        print('Created property for {} particles.'.format(data.particles.count))
