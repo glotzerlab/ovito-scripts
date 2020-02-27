@@ -4,7 +4,7 @@
 
 import freud
 
-def modify(frame,data):
+def modify(frame, data):
     r_max = 1.5
     num_neighbors = 12
     threshold = 0.45 * r_max
