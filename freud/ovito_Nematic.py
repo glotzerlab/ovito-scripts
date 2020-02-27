@@ -6,7 +6,6 @@ from ovito.data import *
 
 def sense_check(director):
     if director==[]: print('WARNING! OVERWRITE DIRECTOR VALUE IN SCRIPT')
-    return
 
 def modify(frame, data):
     #   USER SHOULD SET THIS MANUALLY BEFORE RUNNING SCRIPT

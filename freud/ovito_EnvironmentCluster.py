@@ -14,7 +14,6 @@ def modify(frame, data):
     points = data.particles.positions
     system = (box, points)
 
-
     if data.particles is not None:
         env_cluster = freud.environment.EnvironmentCluster()
         env_cluster.compute(system, threshold=threshold,
