@@ -4,6 +4,7 @@
 
 import freud
 
+
 def modify(frame, data):
     r_max = 1.5
     num_neighbors = 12
@@ -16,8 +17,14 @@ def modify(frame, data):
 
     if data.particles is not None:
         env_cluster = freud.environment.EnvironmentCluster()
-        env_cluster.compute(system, threshold=threshold,
-                neighbors={'num_neighbors': num_neighbors},
-                registration=registration, global_search=global_search) # Causes script to fail
-        data.create_user_particle_property(name='EnvironmentCluster', data_type=int, data=env_cluster.cluster_idx)
-        print('Created property for {} particles.'.format(data.particles.count))
+        env_cluster.compute(
+            system,
+            threshold=threshold,
+            neighbors={"num_neighbors": num_neighbors},
+            registration=registration,
+            global_search=global_search,
+        )  # Causes script to fail
+        data.create_user_particle_property(
+            name="EnvironmentCluster", data_type=int, data=env_cluster.cluster_idx
+        )
+        print(f"Created property for {data.particles.count} particles.")

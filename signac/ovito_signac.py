@@ -5,10 +5,12 @@
 """Prints signac statepoints."""
 
 import os
+
 import signac
 
+
 def modify(frame, data):
-    source_file = data.attributes['SourceFile']
+    source_file = data.attributes["SourceFile"]
     dirname = os.path.dirname(source_file)
     job = signac.get_job(dirname)
     for k, v in job.sp.items():
