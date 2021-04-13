@@ -12,7 +12,7 @@ def modify(frame, data):
     director = np.array([1, 0, 0])
 
     if data.particles is not None:
-        orientations = np.asarray(data.particles["Orientation"])
+        orientations = data.particles["Orientation"][:]
         nematic = freud.order.Nematic(director)
-        nematic.compute(orientations)  # Hasn't been tested.
+        nematic.compute(orientations)
         print(f"Nematic order parameter = {nematic.order}")

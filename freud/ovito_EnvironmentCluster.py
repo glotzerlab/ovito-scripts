@@ -11,14 +11,11 @@ def modify(frame, data):
     threshold = 0.45 * r_max
     registration = False  # Very slow if enabled!
     global_search = False  # Very slow if enabled!
-    box = freud.box.Box.from_matrix(data.cell.matrix, dimensions=2)
-    points = data.particles.positions
-    system = (box, points)
 
     if data.particles is not None:
         env_cluster = freud.environment.EnvironmentCluster()
         env_cluster.compute(
-            system,
+            system=data,
             threshold=threshold,
             neighbors={"num_neighbors": num_neighbors},
             registration=registration,
