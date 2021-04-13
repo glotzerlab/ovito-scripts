@@ -23,7 +23,7 @@ def modify(frame, data):
             neighbors={"num_neighbors": num_neighbors},
             registration=registration,
             global_search=global_search,
-        )  # Causes script to fail
+        )
         data.create_user_particle_property(
             name="EnvironmentCluster", data_type=int, data=env_cluster.cluster_idx
         )
