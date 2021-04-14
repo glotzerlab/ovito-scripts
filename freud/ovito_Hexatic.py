@@ -16,13 +16,13 @@ def modify(frame, data):
         points = data.particles.positions
         system = (box, points)
 
-        order_param = freud.order.Hexatic(k)
-        order_param.compute(system)
-        psi_k = np.copy(order_param.particle_order)
+        hexatic = freud.order.Hexatic(k)
+        hexatic.compute(system)
+        psi_k = np.copy(hexatic.particle_order)
         psi_k -= np.mean(psi_k)
         data.create_user_particle_property(
             name="HexaticOrderParameter",
             data_type=float,
-            data=np.angle(psi_k, deg=True) / order_param.k,
+            data=np.angle(psi_k, deg=True) / hexatic.k,
         )
         print(f"Created property for {data.particles.count} particles.")
