@@ -19,13 +19,13 @@ def modify(frame, data):
             system = freud.AABBQuery.from_system(data)
             distances = np.linalg.norm(
                 system.box.wrap(
-                    [system.positions[j] - system.positions[i] for i, j in bonds_array]
+                    system.points[bonds_array[:, 1]] - system.points[bonds_array[:, 0]]
                 ),
                 axis=-1,
             )
             neighbors = freud.locality.NeighborList.from_arrays(
-                len(system.positions),
-                len(system.positions),
+                len(system.points),
+                len(system.points),
                 bonds_array[:, 0],
                 bonds_array[:, 1],
                 distances,
