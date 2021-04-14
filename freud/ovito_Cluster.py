@@ -2,26 +2,46 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 
-import freud
 import numpy as np
 
-def modify(frame, input, output):
-    if input.particles is not None:
-	box = freud.box.Box.from_matrix(input.cell.matrix)
-	positions = input.particles.position
+import freud
 
-	bonds_array = input.bonds['Topology'][:]
-	distances = np.linalg.norm(box.wrap([positions[j] - positions[i] for i, j in bonds_array]), axis=-1)
-	nlist = freud.locality.NeighborList.from_arrays(
-	    len(positions), len(positions), bonds_array[:, 0], bonds_array[:, 1], distances)
 
-	cl = freud.cluster.Cluster()
-	cl.compute(box, positions, neighbors=nlist)
+def modify(frame, data):
+    # If neighbors is set to "bonds", it will use the system's
+    # bond topology to determine neighbors. Otherwise it should
+    # be a dictionary of query arguments like {"r_max": 1.5}.
+    neighbors = "bonds"
 
-	cl_props = freud.cluster.ClusterProperties()
-	cl_props.compute(box, positions, cl.cluster_idx)
+    if data.particles is not None:
+        if neighbors == "bonds":
+            bonds_array = data.bonds["Topology"][:]
+            system = freud.AABBQuery.from_system(data)
+            distances = np.linalg.norm(
+                system.box.wrap(
+                    system.points[bonds_array[:, 1]] - system.points[bonds_array[:, 0]]
+                ),
+                axis=-1,
+            )
+            neighbors = freud.locality.NeighborList.from_arrays(
+                len(system.points),
+                len(system.points),
+                bonds_array[:, 0],
+                bonds_array[:, 1],
+                distances,
+            )
 
-	output.create_user_particle_property(name='ClusterIndex', data_type=int, data=cl.cluster_idx)
-	output.create_user_particle_property(name='ClusterSize', data_type=int, data=cl_props.sizes)
+        cl = freud.cluster.Cluster()
+        cl.compute(system=data, neighbors=neighbors)
 
-	print('Created property for {} particles.'.format(input.particles.count))
+        cl_props = freud.cluster.ClusterProperties()
+        cl_props.compute(data, cl.cluster_idx)
+
+        data.create_user_particle_property(
+            name="ClusterIndex", data_type=int, data=cl.cluster_idx
+        )
+        data.create_user_particle_property(
+            name="ClusterSize", data_type=int, data=cl_props.sizes[cl.cluster_idx]
+        )
+
+        print(f"Created property for {data.particles.count} particles.")
