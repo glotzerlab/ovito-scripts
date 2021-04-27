@@ -2,6 +2,8 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 
+from typing import Tuple
+
 import numpy as np
 import PySide2.QtGui
 import rowan
@@ -9,8 +11,7 @@ import rowan
 import freud
 
 
-def to_view(bod, view_orientation):
-    image_size = 200
+def to_view(bod, view_orientation, image_size):
     lin_grid = np.linspace(-1, 1, image_size)
     x, y = np.meshgrid(lin_grid, lin_grid)
     y = -y
@@ -24,10 +25,8 @@ def to_view(bod, view_orientation):
     theta = np.arctan2(y, x) % (2 * np.pi)
     num_theta_bins, num_phi_bins = bod.nbins
     theta_bin_edges, phi_bin_edges = bod.bin_edges
-    theta_bins = np.digitize(theta, theta_bin_edges[:-1])
-    phi_bins = np.digitize(phi, phi_bin_edges[:-1])
-    theta_bins[theta_bins == num_theta_bins] = 0
-    phi_bins[phi_bins == num_phi_bins] = 0
+    theta_bins = np.trunc(theta / (2 * np.pi) * num_theta_bins).astype(int)
+    phi_bins = np.trunc(phi / np.pi * num_phi_bins).astype(int)
     view = bod.bond_order[theta_bins, phi_bins]
     view[r2 > 1] = np.nan
     return view
@@ -45,17 +44,23 @@ def to_image(arr, cmap="afmhot", vmin=0, vmax=None):
     return (image * 255).astype(np.uint8)
 
 
-def render(args):
+def render(
+    args,
+    bins: Tuple[int] = (200, 200),
+    mode: str = "bod",
+    neighbors: dict = {"r_max": 1.4},
+    image_size: int = 200,
+    draw_x: float = 10,
+    draw_y: float = 10,
+):
     pipeline = args.scene.selected_pipeline
     if not pipeline:
         return
     data = pipeline.compute(args.frame)
     view_orientation = rowan.from_matrix(args.viewport.viewMatrix[:, :3])
-    n_bins_theta = 100
-    n_bins_phi = 100
-    bod = freud.environment.BondOrder((n_bins_theta, n_bins_phi))
-    bod.compute(system=data, neighbors={"r_max": 1.6})
-    view = to_view(bod, view_orientation)
+    bod = freud.environment.BondOrder(bins, mode)
+    bod.compute(system=data, neighbors=neighbors)
+    view = to_view(bod, view_orientation, image_size)
     buf = to_image(view, cmap="afmhot")
     width, height, bytes_per_pixel = buf.shape
     img = PySide2.QtGui.QImage(
@@ -66,4 +71,4 @@ def render(args):
         PySide2.QtGui.QImage.Format_RGBA8888,
     )
     # Paint QImage onto viewport canvas
-    args.painter.drawImage(10, 10, img)
+    args.painter.drawImage(draw_x, draw_y, img)
