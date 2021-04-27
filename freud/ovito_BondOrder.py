@@ -63,7 +63,11 @@ def render(
         mode:
             Passed to freud.environment.BondOrder.
         neighbors:
-            Passed to freud.environment.BondOrder.compute.
+            Passed to freud.environment.BondOrder.compute. It is recommended
+            to use a cutoff distance at the first trough of the radial
+            distribution function g(r). See
+            https://freud.readthedocs.io/en/latest/topics/querying.html for
+            more information.
         image_size:
             Rendered size of the bond order diagram.
         draw_x:
