@@ -53,6 +53,25 @@ def render(
     draw_x: float = 10,
     draw_y: float = 10,
 ):
+    """Render a bond order diagram that rotates with the view.
+
+    Args:
+        args:
+            OVITO viewport modifier arguments.
+        bins:
+            Passed to freud.environment.BondOrder.
+        mode:
+            Passed to freud.environment.BondOrder.
+        neighbors:
+            Passed to freud.environment.BondOrder.compute.
+        image_size:
+            Rendered size of the bond order diagram.
+        draw_x:
+            X coordinate of the top-left corner of the drawn image.
+        draw_y:
+            Y coordinate of the top-left corner of the drawn image.
+
+    """
     pipeline = args.scene.selected_pipeline
     if not pipeline:
         return
