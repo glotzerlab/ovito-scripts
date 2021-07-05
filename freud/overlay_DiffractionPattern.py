@@ -12,7 +12,12 @@ print("Diffraction, freud version", freud.__version__)
 
 
 def render(
-    args, grid_size=256, output_size=256, draw_x: float = 10, draw_y: float = 10
+    args,
+    grid_size=256,
+    output_size=256,
+    draw_x: float = 10,
+    draw_y: float = 10,
+    zoom: float = 1,
 ):
     pipeline = args.scene.selected_pipeline
     if not pipeline:
@@ -26,7 +31,7 @@ def render(
     dp.compute(
         system=data,
         view_orientation=view_orientation,
-        zoom=1,
+        zoom=zoom,
         peak_width=1,
     )
     buf = dp.to_image(cmap="afmhot", vmax=np.max(dp.diffraction))
