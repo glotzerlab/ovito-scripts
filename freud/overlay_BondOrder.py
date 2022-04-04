@@ -15,7 +15,7 @@ def to_view(bod, view_orientation, image_size):
     lin_grid = np.linspace(-1, 1, image_size)
     x, y = np.meshgrid(lin_grid, lin_grid)
     y = -y
-    r2 = x ** 2 + y ** 2
+    r2 = x**2 + y**2
     z = np.sqrt(np.clip(1 - r2, 0, None))
     xyz = np.dstack((x, y, z))
     xyz = rowan.rotate(rowan.inverse(view_orientation), xyz)
