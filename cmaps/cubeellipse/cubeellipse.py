@@ -41,7 +41,7 @@ def cubeellipse(theta, lam=0.5, gamma=1.0, s=4.0, r=1.0, h=2.0):
     :param h:
         Hue parameter controlling saturation
     """
-    lam = lam ** gamma
+    lam = lam**gamma
 
     a = h * lam * (1 - lam) * 0.5
     v = np.array(
