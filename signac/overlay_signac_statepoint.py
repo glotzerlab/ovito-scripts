@@ -40,8 +40,6 @@ def render(args, alpha=95):
         whitespace_buffer = int(window_height / 100)
         args.painter.setFont(font)
         horizontal_advance = 0
-        descent = args.painter.fontMetrics().descent()
-        ascent = args.painter.fontMetrics().ascent()
 
         # figure out how wide to make the text box
         for _str in strings:
@@ -66,7 +64,7 @@ def render(args, alpha=95):
 
         # add text on top of box
         for i, _str in enumerate(strings):
-            x = args.painter.drawText(
+            args.painter.drawText(
                 fontsize // 6 + whitespace_buffer,
                 int(0.75 * fontsize + whitespace_buffer + 1.3 * fontsize * i)
                 + fontsize // 6,
