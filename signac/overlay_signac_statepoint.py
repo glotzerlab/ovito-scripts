@@ -1,4 +1,6 @@
-import numpy as np
+# Modify the `strings` variable to control what values get rendered in the
+# viewport.
+
 import os
 import PySide6
 import signac
@@ -25,8 +27,7 @@ def render(args, alpha=95):
             jobid,
             f'{job.sp.num_particles} particles',
             f'param1 = {job.sp.param1}',
-            f'param2 = {job.sp.param2}',
-            f'param3 = {job.doc.param3}',
+            f'param2 = {job.doc.param2}',
             # etc...
         ]
         
