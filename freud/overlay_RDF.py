@@ -4,7 +4,7 @@
 
 import matplotlib
 import matplotlib.pyplot as plt
-import PySide2.QtGui
+import PySide6.QtGui
 
 import freud
 
@@ -51,8 +51,8 @@ def render(
 
     # Create a QImage from the memory buffer
     res_x, res_y = buf[1]
-    img = PySide2.QtGui.QImage(
-        buf[0], res_x, res_y, PySide2.QtGui.QImage.Format_RGBA8888
+    img = PySide6.QtGui.QImage(
+        buf[0], res_x, res_y, PySide6.QtGui.QImage.Format_RGBA8888
     )
 
     # Paint QImage onto rendered viewport
