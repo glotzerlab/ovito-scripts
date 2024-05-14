@@ -21,7 +21,7 @@ def render(
     width:float = None,
     height:float = None,
     draw_y: float = 10,
-    align: str = "top right",
+    align: str = "bottom left",
 ):
     plt.close()
     pipeline = args.scene.selected_pipeline
