@@ -50,14 +50,14 @@ def render(
     rdf.plot(ax=ax)
 
     if compute_first_shell_min:
+        import numpy as np
         import scipy
-        import numpy as np        
         rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
         min_point = [rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]]
-        plt.vlines(min_point,*ax.get_ylim(),"k","dashed",label=min_point[0].round(3))    
+        plt.vlines(min_point,*ax.get_ylim(),"k","dashed",label=min_point[0].round(3))
         plt.legend()
         print(f"RDF_MIN: {min_point}")
-        
+
     plt.tight_layout()
     fig.patch.set_alpha(0.0)
     plt.tight_layout()
