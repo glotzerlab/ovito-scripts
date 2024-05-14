@@ -2,10 +2,14 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 from typing import Tuple
+
 import numpy as np
 import PySide6.QtGui
 import rowan
+
 import freud
+
+
 def to_view(bod, view_orientation, image_size):
     lin_grid = np.linspace(-1, 1, image_size)
     x, y = np.meshgrid(lin_grid, lin_grid)
@@ -25,33 +29,36 @@ def to_view(bod, view_orientation, image_size):
     view = bod.bond_order[theta_bins, phi_bins]
     view[r2 > 1] = np.nan
     return view
-    
 
-def to_image(arr, cmap="afmhot", vmin=0, vmax=None,clip_percentile=0.6,viewmode="percentile"):
+
+def to_image(
+    arr, cmap="afmhot", vmin=0, vmax=None, clip_percentile=0.6, viewmode="percentile"
+):
     import matplotlib.cm
     import matplotlib.colors
+
     if vmax is None:
-        
         if viewmode == "percentile":
-            vmax = np.nanpercentile(arr,clip_percentile)
+            vmax = np.nanpercentile(arr, clip_percentile)
         else:
-            vmax = np.nanmax(arr)*0.6
+            vmax = np.nanmax(arr) * 0.6
     norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax, clip=True)
     cmap = matplotlib.cm.get_cmap(cmap)
     image = cmap(norm(arr))
     return (image * 255).astype(np.uint8)
-    
+
+
 def render(
     args,
     bins: Tuple[int] = (200, 200),
     mode: str = "bod",
     neighbors: dict = {"r_max": 1.4},
-    image_size:float = None,
-    draw_x:int = None,
-    draw_y:int = None,
-    clip_percentile:float = 99.9,
-    viewmode:str = "percentile",
-    n_frames_to_average:int = 10
+    image_size: float = None,
+    draw_x: int = None,
+    draw_y: int = None,
+    clip_percentile: float = 99.9,
+    viewmode: str = "percentile",
+    n_frames_to_average: int = 10,
 ):
     """Render a bond order diagram that rotates with the view.
     Args:
@@ -76,7 +83,7 @@ def render(
         clip_percentile:
             Percentile at which to clip data from the BOD. Default value = 99.9.
         viewmode:
-            Whether to clip values based on percentile (recommended), or fall back to the old style of 0.6*max(bod). 
+            Whether to clip values based on percentile (recommended), or fall back to the old style of 0.6*max(bod).
             Any value other than "percentile" will use the old clipping method.
             Default value: "percentile"
     """
@@ -86,8 +93,7 @@ def render(
         draw_x = args.size[1] - 10 - image_size
     if draw_y is None:
         draw_y = args.size[0] - 10 - image_size
-    
-    
+
     pipeline = args.scene.selected_pipeline
     if not pipeline:
         return
@@ -95,10 +101,17 @@ def render(
     view_orientation = rowan.from_matrix(args.viewport.viewMatrix[:, :3])
     bod = freud.environment.BondOrder(bins, mode)
     data = pipeline.compute(args.frame)
-    bod.compute(system=data, neighbors=neighbors,orientations=data.particles.orientations,reset=True)
-        
+    bod.compute(
+        system=data,
+        neighbors=neighbors,
+        orientations=data.particles.orientations,
+        reset=True,
+    )
+
     view = to_view(bod, view_orientation, image_size)
-    buf = to_image(view, cmap="afmhot",clip_percentile=clip_percentile,viewmode=viewmode)
+    buf = to_image(
+        view, cmap="afmhot", clip_percentile=clip_percentile, viewmode=viewmode
+    )
     width, height, bytes_per_pixel = buf.shape
     img = PySide6.QtGui.QImage(
         buf,
