@@ -1,4 +1,4 @@
-# Copyright (c) 2019 The Regents of the University of Michigan
+ Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 
@@ -17,11 +17,11 @@ def render(
     bins: int = 300,
     r_max: float = 5.0,
     dpi: float = 150,
-    width: float = 3.5,
-    height: float = 3,
-    draw_x: float = 10,
+    draw_x: float = 10
+    width:float = None,
+    height:float = None,
     draw_y: float = 10,
-    align: str = "bottom left",
+    align: str = "top right",
 ):
     plt.close()
     pipeline = args.scene.selected_pipeline
@@ -36,6 +36,10 @@ def render(
 
     viewport_width = args.painter.window().width()
     viewport_height = args.painter.window().height()
+    if width is None:
+        width = viewport_width/600
+    if height is None:
+        height = viewport_height/800
     if "right" in align:
         draw_x = viewport_width - dpi * width - draw_x
     if "bottom" in align:
@@ -44,6 +48,7 @@ def render(
     # Create figure
     fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
     rdf.plot(ax=ax)
+    fig.patch.set_alpha(0.0)
     plt.tight_layout()
 
     # Render figure to an in-memory buffer.
