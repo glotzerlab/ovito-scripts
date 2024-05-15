@@ -83,7 +83,8 @@ def render(
         clip_percentile:
             Percentile at which to clip data from the BOD. Default value = 99.9.
         viewmode:
-            Whether to clip values based on percentile (recommended), or fall back to the old style of 0.6*max(bod).
+            Whether to clip values based on percentile (recommended), or fall back to the old style 
+of 0.6*max(bod). Any value other than "percentile" will use the old clipping method.
             Any value other than "percentile" will use the old clipping method.
             Default value: "percentile"
     """
