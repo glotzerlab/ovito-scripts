@@ -18,8 +18,8 @@ def render(
     r_max: float = 5.0,
     dpi: float = 150,
     draw_x: float = 10,
-    width:float = None,
-    height:float = None,
+    width: float = None,
+    height: float = None,
     draw_y: float = 10,
     align: str = "bottom left",
 ):
@@ -37,9 +37,9 @@ def render(
     viewport_width = args.painter.window().width()
     viewport_height = args.painter.window().height()
     if width is None:
-        width = viewport_width/600
+        width = viewport_width / 600
     if height is None:
-        height = viewport_height/800
+        height = viewport_height / 800
     if "right" in align:
         draw_x = viewport_width - dpi * width - draw_x
     if "bottom" in align:
@@ -52,9 +52,12 @@ def render(
     if compute_first_shell_min:
         import numpy as np
         import scipy
+
         rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
         min_point = [rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]]
-        plt.vlines(min_point,*ax.get_ylim(),"k","dashed",label=min_point[0].round(3))
+        plt.vlines(
+            min_point, *ax.get_ylim(), "k", "dashed", label=min_point[0].round(3)
+        )
         plt.legend()
         print(f"RDF_MIN: {min_point}")
 
