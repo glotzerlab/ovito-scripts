@@ -61,32 +61,32 @@ def render(
     n_frames_to_average: int = 10,
 ):
     """Render a bond order diagram that rotates with the view.
-    Args:
-        args:
-            OVITO viewport modifier arguments.
-        bins:
-            Passed to freud.environment.BondOrder.
-        mode:
-            Passed to freud.environment.BondOrder.
-        neighbors:
-            Passed to freud.environment.BondOrder.compute. It is recommended
-            to use a cutoff distance at the first trough of the radial
-            distribution function g(r). See
-            https://freud.readthedocs.io/en/latest/topics/querying.html for
-            more information.
-        image_size:
-            Rendered size of the bond order diagram.
-        draw_x:
-            X coordinate of the top-left corner of the drawn image.
-        draw_y:
-            Y coordinate of the top-left corner of the drawn image.
-        clip_percentile:
-            Percentile at which to clip data from the BOD. Default value = 99.9.
-        viewmode:
-            Whether to clip values based on percentile (recommended), or fall back to the old style 
-of 0.6*max(bod). Any value other than "percentile" will use the old clipping method.
-            Any value other than "percentile" will use the old clipping method.
-            Default value: "percentile"
+        Args:
+            args:
+                OVITO viewport modifier arguments.
+            bins:
+                Passed to freud.environment.BondOrder.
+            mode:
+                Passed to freud.environment.BondOrder.
+            neighbors:
+                Passed to freud.environment.BondOrder.compute. It is recommended
+                to use a cutoff distance at the first trough of the radial
+                distribution function g(r). See
+                https://freud.readthedocs.io/en/latest/topics/querying.html for
+                more information.
+            image_size:
+                Rendered size of the bond order diagram.
+            draw_x:
+                X coordinate of the top-left corner of the drawn image.
+            draw_y:
+                Y coordinate of the top-left corner of the drawn image.
+            clip_percentile:
+                Percentile at which to clip data from the BOD. Default value = 99.9.
+            viewmode:
+                Whether to clip values based on percentile (recommended), or fall back to the old style
+    of 0.6*max(bod). Any value other than "percentile" will use the old clipping method.
+                Any value other than "percentile" will use the old clipping method.
+                Default value: "percentile"
     """
     if image_size is None:
         image_size = args.size[1] // 4
