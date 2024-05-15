@@ -17,7 +17,7 @@ def render(
     bins: int = 300,
     r_max: float = 5.0,
     dpi: float = 150,
-    draw_x: float = 10
+    draw_x: float = 10,
     width:float = None,
     height:float = None,
     draw_y: float = 10,
