@@ -17,11 +17,12 @@ def render(
     bins: int = 300,
     r_max: float = 5.0,
     dpi: float = 150,
-    width: float = 3.5,
-    height: float = 3,
     draw_x: float = 10,
+    width: float = None,
+    height: float = None,
     draw_y: float = 10,
     align: str = "bottom left",
+    compute_first_shell_min: bool = False,
 ):
     plt.close()
     pipeline = args.scene.selected_pipeline
@@ -36,6 +37,10 @@ def render(
 
     viewport_width = args.painter.window().width()
     viewport_height = args.painter.window().height()
+    if width is None:
+        width = viewport_width / 600
+    if height is None:
+        height = viewport_height / 800
     if "right" in align:
         draw_x = viewport_width - dpi * width - draw_x
     if "bottom" in align:
@@ -44,6 +49,21 @@ def render(
     # Create figure
     fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
     rdf.plot(ax=ax)
+
+    if compute_first_shell_min:
+        import numpy as np
+        import scipy
+
+        rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
+        min_point = [rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]]
+        plt.vlines(
+            min_point, *ax.get_ylim(), "k", "dashed", label=min_point[0].round(3)
+        )
+        plt.legend()
+        print(f"RDF_MIN: {min_point}")
+
+    plt.tight_layout()
+    fig.patch.set_alpha(0.0)
     plt.tight_layout()
 
     # Render figure to an in-memory buffer.
