@@ -92,7 +92,7 @@ class DiffractionPatternOverlay(ViewportOverlayInterface):
             top = (h - zh) // 2
             left = (w - zw) // 2
             fft_image = scipy.ndimage.zoom(
-                fft_image[top:top + zh, left:left + zw], zoom_tuple, order=0
+                fft_image[top : top + zh, left : left + zw], zoom_tuple, order=0
             )
 
         width, height, bytes_per_pixel = fft_image.shape
