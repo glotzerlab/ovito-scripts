@@ -1,10 +1,11 @@
 import matplotlib
-import numpy as np
 import PySide6.QtGui
 import scipy.ndimage
 from ovito.data import DataCollection
 from ovito.vis import ViewportOverlayInterface
 from traits.api import Enum, Range, String
+
+import numpy as np
 
 
 class DiffractionPatternOverlay(ViewportOverlayInterface):

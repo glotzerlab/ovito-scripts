@@ -51,8 +51,9 @@ def render(
     rdf.plot(ax=ax)
 
     if compute_first_shell_min:
-        import numpy as np
         import scipy
+
+        import numpy as np
 
         rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
         min_point = [rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]]

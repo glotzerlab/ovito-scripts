@@ -3,11 +3,11 @@
 # This software is licensed under the BSD 3-Clause License.
 from typing import Tuple
 
-import numpy as np
 import PySide6.QtGui
 import rowan
 
 import freud
+import numpy as np
 
 
 def to_view(bod, view_orientation, image_size):
