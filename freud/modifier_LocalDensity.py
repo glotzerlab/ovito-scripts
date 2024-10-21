@@ -9,7 +9,5 @@ def modify(frame, data):
     if data.particles is not None:
         ld = freud.density.LocalDensity(r_max=3, diameter=0.05)
         ld.compute(data)
-        data.create_user_particle_property(
-            name="LocalDensity", data_type=float, data=ld.density
-        )
+        data.create_user_particle_property(name="LocalDensity", data_type=float, data=ld.density)
         print(f"Created property for {data.particles.count} particles.")

@@ -56,9 +56,7 @@ def render(
 
         rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
         min_point = [rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]]
-        plt.vlines(
-            min_point, *ax.get_ylim(), "k", "dashed", label=min_point[0].round(3)
-        )
+        plt.vlines(min_point, *ax.get_ylim(), "k", "dashed", label=min_point[0].round(3))
         plt.legend()
         print(f"RDF_MIN: {min_point}")
 
@@ -71,9 +69,7 @@ def render(
 
     # Create a QImage from the memory buffer
     res_x, res_y = buf[1]
-    img = PySide6.QtGui.QImage(
-        buf[0], res_x, res_y, PySide6.QtGui.QImage.Format_RGBA8888
-    )
+    img = PySide6.QtGui.QImage(buf[0], res_x, res_y, PySide6.QtGui.QImage.Format_RGBA8888)
 
     # Paint QImage onto rendered viewport
     args.painter.drawImage(draw_x, draw_y, img)

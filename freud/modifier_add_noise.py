@@ -12,11 +12,14 @@ import freud
 def modify(frame, data, sigma=0.05, wrap=True):
     if data.particles is not None:
         system = freud.AABBQuery.from_system(data)
-        N = len(system.points)
-        noise = np.random.multivariate_normal(
+        n = len(system.points)
+
+        # Generate the noise
+        rng = np.random.default_rng()
+        noise = rng.multivariate_normal(
             mean=(0, 0, 0),
             cov=sigma * np.eye(3),
-            size=N,
+            size=n,
         )
         print(system.box)
 
