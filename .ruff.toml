@@ -1,0 +1,5 @@
+include = ["*.py", "*.ipynb"]
+line-length = 100
+
+[lint]
+select = ["B","E","F","I","N","S","W","C4","UP","NPY","SIM","PIE790","PIE794"]
