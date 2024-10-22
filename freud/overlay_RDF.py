@@ -1,12 +1,13 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-import freud
 import matplotlib.pyplot as plt
-import numpy as np
 from ovito.data import DataCollection
 from ovito.vis import ViewportOverlayInterface
 from traits.api import Bool, Enum, Range, Tuple
+
+import freud
+import numpy as np
 
 
 class RadialDistributionOverlay(ViewportOverlayInterface):
