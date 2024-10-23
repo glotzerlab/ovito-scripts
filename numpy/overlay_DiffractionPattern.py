@@ -32,9 +32,7 @@ class DiffractionPatternOverlay(ViewportOverlayInterface):
 
     act_safe = False
 
-    def render(
-        self, canvas: ViewportOverlayInterface.Canvas, data: DataCollection, **kwargs
-    ):
+    def render(self, canvas: ViewportOverlayInterface.Canvas, data: DataCollection, **kwargs):
         print(self.output_blur_width, type(self.output_blur_width))
 
         # By default, we do not prune points "inside" the camera
@@ -44,17 +42,13 @@ class DiffractionPatternOverlay(ViewportOverlayInterface):
             xy = np.array(xy, dtype=float)
 
         except ValueError:  # One or more points lie behind the camera
-            xy = np.array(
-                [p if p is not None else [np.nan, np.nan] for p in xy], dtype=float
-            )
+            xy = np.array([p if p is not None else [np.nan, np.nan] for p in xy], dtype=float)
 
         # Create image by making a 2D histogram (copying freud)
         hist, _, _ = np.histogram2d(*xy.T, bins=self.num_bins_input)
 
         # Apply gaussian blur if desired
-        image = scipy.ndimage.gaussian_filter(
-            hist, self.input_blur_width, order=0, mode="wrap"
-        )
+        image = scipy.ndimage.gaussian_filter(hist, self.input_blur_width, order=0, mode="wrap")
 
         # Take FFT
         fft_image = np.fft.fft2(image)

@@ -62,8 +62,6 @@ class RadialDistributionOverlay(ViewportOverlayInterface):
 
                 rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
                 min_point = rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]
-                plt.vlines(
-                    [min_point], *ax.get_ylim(), "k", "dashed", label=min_point.round(3)
-                )
+                plt.vlines([min_point], *ax.get_ylim(), "k", "dashed", label=min_point.round(3))
                 plt.legend()
                 print(f"RDF_MIN: {min_point:.6f}")

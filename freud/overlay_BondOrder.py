@@ -37,9 +37,7 @@ class BondOrderOverlay(ViewportOverlayInterface):
         label="Image Position",
     )
 
-    def render(
-        self, canvas: ViewportOverlayInterface.Canvas, data: DataCollection, **kwargs
-    ):
+    def render(self, canvas: ViewportOverlayInterface.Canvas, data: DataCollection, **kwargs):
         bod = freud.environment.BondOrder(bins=self.bins, mode=self.mode)
         bod.compute(
             system=data,
