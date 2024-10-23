@@ -2,9 +2,8 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 
-import numpy as np
-
 import freud
+import numpy as np
 
 
 def modify(frame, data):

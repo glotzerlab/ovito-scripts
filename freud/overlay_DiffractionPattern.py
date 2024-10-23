@@ -2,11 +2,11 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 
-import numpy as np
 import PySide6.QtGui
 import rowan
 
 import freud
+import numpy as np
 
 print("Diffraction, freud version", freud.__version__)
 
