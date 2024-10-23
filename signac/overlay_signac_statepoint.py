@@ -66,7 +66,6 @@ def render(args, alpha=95):
         for i, _str in enumerate(strings):
             args.painter.drawText(
                 fontsize // 6 + whitespace_buffer,
-                int(0.75 * fontsize + whitespace_buffer + 1.3 * fontsize * i)
-                + fontsize // 6,
+                int(0.75 * fontsize + whitespace_buffer + 1.3 * fontsize * i) + fontsize // 6,
                 _str,
             )
