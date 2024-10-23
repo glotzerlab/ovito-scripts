@@ -31,9 +31,7 @@ def to_view(bod, view_orientation, image_size):
     return view
 
 
-def to_image(
-    arr, cmap="afmhot", vmin=0, vmax=None, clip_percentile=0.6, viewmode="percentile"
-):
+def to_image(arr, cmap="afmhot", vmin=0, vmax=None, clip_percentile=0.6, viewmode="percentile"):
     import matplotlib.cm
     import matplotlib.colors
 
@@ -110,9 +108,7 @@ def render(
     )
 
     view = to_view(bod, view_orientation, image_size)
-    buf = to_image(
-        view, cmap="afmhot", clip_percentile=clip_percentile, viewmode=viewmode
-    )
+    buf = to_image(view, cmap="afmhot", clip_percentile=clip_percentile, viewmode=viewmode)
     width, height, bytes_per_pixel = buf.shape
     img = PySide6.QtGui.QImage(
         buf,

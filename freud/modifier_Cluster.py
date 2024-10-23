@@ -37,9 +37,7 @@ def modify(frame, data):
         cl_props = freud.cluster.ClusterProperties()
         cl_props.compute(data, cl.cluster_idx)
 
-        data.create_user_particle_property(
-            name="ClusterIndex", data_type=int, data=cl.cluster_idx
-        )
+        data.create_user_particle_property(name="ClusterIndex", data_type=int, data=cl.cluster_idx)
         data.create_user_particle_property(
             name="ClusterSize", data_type=int, data=cl_props.sizes[cl.cluster_idx]
         )

@@ -27,8 +27,8 @@ def get_unit_area_ngon(n):
     # A_poly = ((n*r**2)/2)*np.sin(2*np.pi/n)
     # A_circ = np.pi*r**2
     # pos *= np.sqrt(A_circ/A_poly)
-    A_circ_A_poly = np.pi / ((n / 2) * np.sin(2 * np.pi / n))
-    pos *= np.sqrt(A_circ_A_poly)
+    a_circ_a_poly = np.pi / ((n / 2) * np.sin(2 * np.pi / n))
+    pos *= np.sqrt(a_circ_a_poly)
 
     return pos.T
 
@@ -43,9 +43,7 @@ def render(args):
     node = ovito.dataset.selected_node
     data = node.compute()
 
-    box = freud.Box.from_matrix(
-        data.cell.matrix[:, :3], dimensions=2 if data.cell.is2D else 3
-    )
+    box = freud.Box.from_matrix(data.cell.matrix[:, :3], dimensions=2 if data.cell.is2D else 3)
 
     # The z positions are O(1e-15) but not quite zero.
     positions = data.particles.position[...].copy()
@@ -80,9 +78,7 @@ def render(args):
 
     # Create a QImage from the memory buffer
     res_x, res_y = buf[1]
-    img = PySide2.QtGui.QImage(
-        buf[0], res_x, res_y, PySide2.QtGui.QImage.Format_RGBA8888
-    )
+    img = PySide2.QtGui.QImage(buf[0], res_x, res_y, PySide2.QtGui.QImage.Format_RGBA8888)
 
     # Paint QImage onto rendered viewport
     painter.drawImage(0, 0, img)

@@ -44,9 +44,7 @@ def cubeellipse(theta, lam=0.5, gamma=1.0, s=4.0, r=1.0, h=2.0):
     lam = lam**gamma
 
     a = h * lam * (1 - lam) * 0.5
-    v = np.array(
-        [[-0.14861, 1.78277], [-0.29227, -0.90649], [1.97294, 0.0]], dtype=np.float32
-    )
+    v = np.array([[-0.14861, 1.78277], [-0.29227, -0.90649], [1.97294, 0.0]], dtype=np.float32)
     ctarray = np.array([np.cos(theta * r + s), np.sin(theta * r + s)], dtype=np.float32)
     return (lam + a * v.dot(ctarray)).T
 
@@ -63,10 +61,7 @@ def generate_linear_colormap():
     # To get the final linear colormap, we rotate this counter-clockwise since
     # values will save top->bottom.
     rgb = np.asarray(
-        [
-            width * [cubeellipse(theta)]
-            for theta in np.arange(0, 2 * np.pi, 2 * np.pi / height)
-        ]
+        [width * [cubeellipse(theta)] for theta in np.arange(0, 2 * np.pi, 2 * np.pi / height)]
     )
     plt.imshow(rgb)
     plt.axis("off")
