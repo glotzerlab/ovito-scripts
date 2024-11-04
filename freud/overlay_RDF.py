@@ -1,75 +1,67 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-
-import matplotlib
 import matplotlib.pyplot as plt
-import PySide6.QtGui
+from ovito.data import DataCollection
+from ovito.vis import ViewportOverlayInterface
+from traits.api import Bool, Enum, Range, Tuple
 
 import freud
-
-# Activate 'agg' backend for off-screen plotting.
-matplotlib.use("Agg")
+import numpy as np
 
 
-def render(
-    args,
-    bins: int = 300,
-    r_max: float = 5.0,
-    dpi: float = 150,
-    draw_x: float = 10,
-    width: float = None,
-    height: float = None,
-    draw_y: float = 10,
-    align: str = "bottom left",
-    compute_first_shell_min: bool = False,
-):
-    plt.close()
-    pipeline = args.scene.selected_pipeline
-    if not pipeline:
-        return
-    data = pipeline.compute(args.frame)
+class RadialDistributionOverlay(ViewportOverlayInterface):
+    # Adjustable user parameters:
+    bins = Range(value=300, low=1, label="RDF Bins", dtype=int)
+    r_max = Range(value=5.0, low=0.0, label="Maximum Radius")
+    font_scale = Range(value=2.75, low=0.0, label="Font Scale")
 
-    rdf = freud.density.RDF(bins=bins, r_max=r_max)
-    rdf.compute(data)
+    output_size = Tuple((512, 384), label="Output Image Size", dtype=tuple[int, int])
 
-    # Get size of rendered viewport image in pixels.
+    anchor = Enum(
+        ["south west", "south east", "north west", "north east"],
+        value="north east",
+        label="Image Position",
+    )
 
-    viewport_width = args.painter.window().width()
-    viewport_height = args.painter.window().height()
-    if width is None:
-        width = viewport_width / 600
-    if height is None:
-        height = viewport_height / 800
-    if "right" in align:
-        draw_x = viewport_width - dpi * width - draw_x
-    if "bottom" in align:
-        draw_y = viewport_height - dpi * height - draw_y
+    compute_first_shell_min = Bool(value=False, label="Compute first shell radius")
 
-    # Create figure
-    fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
-    rdf.plot(ax=ax)
+    cmap = "afmhot"
 
-    if compute_first_shell_min:
-        import numpy as np
-        import scipy
+    def render(
+        self,
+        canvas: ViewportOverlayInterface.Canvas,
+        data: DataCollection,
+        **kwargs,
+    ):
+        rdf = freud.density.RDF(bins=self.bins, r_max=self.r_max)
+        rdf.compute(data)
 
-        rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
-        min_point = [rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]]
-        plt.vlines(min_point, *ax.get_ylim(), "k", "dashed", label=min_point[0].round(3))
-        plt.legend()
-        print(f"RDF_MIN: {min_point}")
+        image_pos = (
+            0.01 if "west" in self.anchor else 0.99,
+            0.01 if "south" in self.anchor else 0.99,
+        )
 
-    plt.tight_layout()
-    fig.patch.set_alpha(0.0)
-    plt.tight_layout()
+        size = self.output_size / np.array(canvas.logical_size)
 
-    # Render figure to an in-memory buffer.
-    buf = fig.canvas.print_to_buffer()
+        # Create figure
+        with canvas.mpl_figure(
+            pos=image_pos,
+            size=size,
+            anchor=self.anchor,
+            tight_layout=True,
+            font_scale=self.font_scale,
+        ) as fig:
+            ax = fig.subplots()
+            rdf.plot(ax=ax)
+            ax.set_xticks(np.arange(rdf.bin_centers[0], self.r_max + 1).astype(int))
+            ax.set_yticks([])
 
-    # Create a QImage from the memory buffer
-    res_x, res_y = buf[1]
-    img = PySide6.QtGui.QImage(buf[0], res_x, res_y, PySide6.QtGui.QImage.Format_RGBA8888)
+            if self.compute_first_shell_min:
+                import scipy
 
-    # Paint QImage onto rendered viewport
-    args.painter.drawImage(draw_x, draw_y, img)
+                rdf_minima = scipy.signal.argrelmin(rdf.rdf)[0]
+                min_point = rdf.bin_centers[rdf_minima[np.argmin(rdf.rdf[rdf_minima])]]
+                plt.vlines([min_point], *ax.get_ylim(), "k", "dashed", label=min_point.round(3))
+                plt.legend()
+                print(f"RDF_MIN: {min_point:.6f}")

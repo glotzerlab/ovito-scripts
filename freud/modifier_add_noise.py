@@ -4,9 +4,8 @@
 
 # Keeps a certain particle at the center of the box by shifting and wrapping other particles.
 
-import numpy as np
-
 import freud
+import numpy as np
 
 
 def modify(frame, data, sigma=0.05, wrap=True):

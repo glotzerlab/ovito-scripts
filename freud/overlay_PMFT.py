@@ -4,13 +4,13 @@
 
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 import ovito
 import PySide2.QtGui
 import rowan
 from matplotlib import patches
 
 import freud
+import numpy as np
 
 
 def get_unit_area_ngon(n):
