@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
+import numpy.linalg as la
 
 import numpy as np
-import numpy.linalg as la
 
 """
 This helper script generates a cyclic colormap based on D.A. Green's
