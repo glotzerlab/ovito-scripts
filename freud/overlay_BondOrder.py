@@ -61,9 +61,7 @@ class BondOrderOverlay(ViewportOverlayInterface):
             bod.compute(
                 system=data,
                 neighbors=dict(self.neighbors),
-                orientations=data.particles.orientations[:].tolist()
-                if hasattr(data.particles, "orientations")
-                else None,
+                orientations=orientations,
                 reset=False,
             )
 
