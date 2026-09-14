@@ -2,7 +2,6 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 
-import matplotlib.cm
 import matplotlib.colors
 import PySide6.QtGui
 from ovito.data import DataCollection
@@ -50,14 +49,18 @@ class BondOrderOverlay(ViewportOverlayInterface):
     ):
         bod = freud.environment.BondOrder(bins=self.bins, mode=self.mode)
 
-        for f in range(frame)[-self.nframes :]:
+        # check existance of particle orientations
+        if hasattr(data.particles, "orientations") and data.particles.orientations is not None:
+            orientations = data.particles.orientations[:].tolist()
+        else:
+            orientations = None
+
+        for f in range(frame + 1)[-self.nframes :]:
             data = pipeline.compute(f)
             bod.compute(
                 system=data,
                 neighbors=dict(self.neighbors),
-                orientations=data.particles.orientations[:].tolist()
-                if hasattr(data.particles, "orientations")
-                else None,
+                orientations=orientations,
                 reset=False,
             )
 
@@ -71,7 +74,7 @@ class BondOrderOverlay(ViewportOverlayInterface):
 
         vmin, vmax = 0.0, np.nanpercentile(view, self.clip_percentile)
         norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax, clip=True)
-        cmap = matplotlib.cm.get_cmap(self.cmap)
+        cmap = matplotlib.colormaps.get_cmap(self.cmap)
         image = cmap(norm(view))
         buf = (image * 255).astype(np.uint8)
 
