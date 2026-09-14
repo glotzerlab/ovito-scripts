@@ -3,7 +3,6 @@
 # This software is licensed under the BSD 3-Clause License.
 
 import matplotlib.colors
-
 import PySide6.QtGui
 from ovito.data import DataCollection
 from ovito.pipeline import Pipeline
@@ -50,13 +49,13 @@ class BondOrderOverlay(ViewportOverlayInterface):
     ):
         bod = freud.environment.BondOrder(bins=self.bins, mode=self.mode)
 
-        # check existance of particle orientations 
-        if hasattr(data.particles, "orientations") and data.particles.orientations is not None: 
+        # check existance of particle orientations
+        if hasattr(data.particles, "orientations") and data.particles.orientations is not None:
             orientations = data.particles.orientations[:].tolist()
         else:
             orientations = None
 
-        for f in range(frame+1)[-self.nframes :]:
+        for f in range(frame + 1)[-self.nframes :]:
             data = pipeline.compute(f)
             bod.compute(
                 system=data,
